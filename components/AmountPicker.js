@@ -8,16 +8,36 @@ import { Colors } from '../constants/Colors';
 export default function AmountPicker() {
   const [amount, setAmount] = useState(1);
 
+  const decreaseAmount = () => {
+    if (amount <= 1) return;
+    setAmount(amount - 1);
+  };
+
+  const increaseAmount = () => {
+    if (amount >= 10) return;
+    setAmount(amount + 1);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
-        <IconButton icon="remove-outline" size={32} color="black" />
+        <IconButton
+          icon="remove-outline"
+          size={32}
+          color="black"
+          onPress={decreaseAmount}
+        />
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.text}>{amount}</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <IconButton icon="add-outline" size={32} color={Colors.textAccent} />
+        <IconButton
+          icon="add-outline"
+          size={32}
+          color={Colors.textAccent}
+          onPress={increaseAmount}
+        />
       </View>
     </View>
   );
@@ -28,7 +48,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: 150,
+    width: 200,
     height: 50,
     borderRadius: 50,
     padding: 15,
@@ -41,7 +61,4 @@ const styles = StyleSheet.create({
     color: Colors.textAccent,
     fontSize: 26,
   },
-
-  textContainer: {},
-  buttonContainer: {},
 });
