@@ -1,12 +1,38 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import PizzaListScreen from './screens/PizzaListScreen';
+import PizzaOrderScreen from './screens/PizzaOrderScreen';
+
+import { Colors } from './constants/Colors';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          contentStyle: { backgroundColor: Colors.backgroundPrimary },
+        }}
+      >
+        <Stack.Screen
+          name="PizzaList"
+          component={PizzaListScreen}
+          options={{ title: 'Pizza List' }}
+        />
+        <Stack.Screen
+          name="PizzaOrder"
+          component={PizzaOrderScreen}
+          options={{
+            title: 'Pizza Ordering',
+            contentStyle: { backgroundColor: Colors.backgroundSecondary },
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
