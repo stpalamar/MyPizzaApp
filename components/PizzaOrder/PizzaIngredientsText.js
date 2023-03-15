@@ -5,10 +5,12 @@ export default function PizzaIngredientsText({ ingredients, style }) {
   return (
     <View>
       <Text style={style}>
-        {ingredients.map((i) => {
-          if (ingredients.indexOf(i) === ingredients.length - 1) return i;
-          else return i + ', ';
-        })}
+        {ingredients === undefined
+          ? 'None'
+          : ingredients.map((i) => {
+              if (ingredients.indexOf(i) === ingredients.length - 1) return i;
+              else return i + ', ';
+            })}
       </Text>
     </View>
   );
