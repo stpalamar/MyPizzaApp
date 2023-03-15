@@ -15,6 +15,7 @@ import { Colors } from './constants/Colors';
 import { openDatabase } from './Database';
 
 const db = openDatabase();
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {

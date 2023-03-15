@@ -86,9 +86,9 @@ export default function PizzaOrderScreen({ route, navigation }) {
             size: size.Medium,
             type: type.Thin,
             cheeseSides: false,
-            name: 'Stanislav',
-            address: 'st. Lipkovska 1',
-            phone: '0660769298',
+            name: '',
+            address: '',
+            phone: '',
           }}
           onSubmit={(values) => {
             setModalVisible(true);
