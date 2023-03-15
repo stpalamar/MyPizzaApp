@@ -60,6 +60,7 @@ export default function App() {
           component={OrdersListScreen}
           options={{
             title: 'My Orders',
+            contentStyle: { backgroundColor: Colors.backgroundSecondary },
           }}
         />
       </Stack.Navigator>
