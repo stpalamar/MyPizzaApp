@@ -12,11 +12,11 @@ import { Formik, Field, ErrorMessage, useFormikContext } from 'formik';
 import * as Yup from 'yup';
 import Checkbox from 'expo-checkbox';
 
-import PizzaIngredientsText from '../components/PizzaIngredientsText';
-import AmountPickerField from '../components/AmountPickerField';
+import PizzaIngredientsText from '../components/PizzaOrder/PizzaIngredientsText';
+import AmountPickerField from '../components/CustomFields/AmountPickerField';
 import ButtonPickerField from '../components/ButtonPickerField';
 import { Picker } from '@react-native-picker/picker';
-import CustomButton from '../components/CustomButton';
+import CustomButton from '../components/Buttons/CustomButton';
 
 import { Colors } from '../constants/Colors';
 

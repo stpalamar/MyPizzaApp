@@ -2,9 +2,9 @@ import { View, Text, Pressable, Image, StyleSheet } from 'react-native';
 import React from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import PizzaIngredientsText from '../components/PizzaIngredientsText';
+import PizzaIngredientsText from '../PizzaOrder/PizzaIngredientsText';
 
-import { Colors } from '../constants/Colors';
+import { Colors } from '../../constants/Colors';
 
 export default function PizzaListItem({
   id,

@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { FlatList } from 'react-native';
-import PizzaListItem from '../components/PizzaListItem';
+import PizzaListItem from '../components/PizzaList/PizzaListItem';
 
 import { PIZZAS } from '../data/dummy-data';
 
