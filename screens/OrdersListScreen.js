@@ -1,4 +1,4 @@
-import { FlatList } from 'react-native';
+import { Text, View, FlatList, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import OrdersListItem from '../components/OrdersList/OrdersListItem';
 
@@ -21,6 +21,13 @@ export default function OrdersListScreen() {
     return <OrdersListItem data={itemData.item} />;
   }
 
+  if (orders && orders.length === 0)
+    return (
+      <View style={styles.centeredView}>
+        <Text style={styles.text}>No orders found</Text>
+      </View>
+    );
+
   return (
     <FlatList
       data={orders}
@@ -29,3 +36,15 @@ export default function OrdersListScreen() {
     />
   );
 }
+
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 0.75,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 32,
+    fontWeight: 'bold',
+  },
+});

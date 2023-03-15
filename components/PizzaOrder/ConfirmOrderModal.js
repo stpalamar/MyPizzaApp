@@ -30,7 +30,7 @@ export default function ConfirmOrderModal({ data, onCancel, ...props }) {
     db.transaction((tx) => {
       console.log(ingredients);
       tx.executeSql(
-        'insert into orders (pizzaName, totalPrice, ingredients, amount, size, type, cheeseSides, name, address, phone) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'insert into order (pizzaName, totalPrice, ingredients, amount, size, type, cheeseSides, name, address, phone) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [
           pizzaName,
           totalPrice,
@@ -43,7 +43,8 @@ export default function ConfirmOrderModal({ data, onCancel, ...props }) {
           address,
           phone,
         ],
-        setIsSuccess(true)
+        setIsSuccess(true),
+        (_, error) => console.log(error)
       );
       tx.executeSql('select * from orders', [], (_, { rows }) =>
         console.log(JSON.stringify(rows), null, 2)
