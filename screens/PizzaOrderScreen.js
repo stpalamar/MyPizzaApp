@@ -8,19 +8,20 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Formik, Field, ErrorMessage, useFormikContext } from 'formik';
+import { Formik, ErrorMessage, useFormikContext } from 'formik';
 import * as Yup from 'yup';
 import Checkbox from 'expo-checkbox';
-
-import PizzaIngredientsText from '../components/PizzaOrder/PizzaIngredientsText';
-import AmountPickerField from '../components/CustomFields/AmountPickerField';
-import ButtonPickerField from '../components/CustomFields/ButtonPickerField';
 import { Picker } from '@react-native-picker/picker';
-import CustomButton from '../components/Buttons/CustomButton';
 
 import { Colors } from '../constants/Colors';
 
 import { PIZZAS } from '../data/dummy-data';
+
+import ConfirmOrderModal from '../components/PizzaOrder/ConfirmOrderModal';
+import PizzaIngredientsText from '../components/PizzaOrder/PizzaIngredientsText';
+import AmountPickerField from '../components/CustomFields/AmountPickerField';
+import ButtonPickerField from '../components/CustomFields/ButtonPickerField';
+import CustomButton from '../components/Buttons/CustomButton';
 
 const size = {
   Small: 'Small',
@@ -61,7 +62,9 @@ const CalcTotalPrice = () => {
 export default function PizzaOrderScreen({ route, navigation }) {
   const pizzaId = route.params.pizzaId;
   const selectedPizza = PIZZAS.find((pizza) => pizza.id === pizzaId);
-  const [totalPrice, setTotalPrice] = useState(selectedPizza.price);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [orderData, setOrderData] = useState({});
+
   const schema = Yup.object().shape({
     name: Yup.string().required("Name can't be empty"),
     address: Yup.string().required("Address can't be empty"),
@@ -77,7 +80,7 @@ export default function PizzaOrderScreen({ route, navigation }) {
           initialValues={{
             pizzaName: selectedPizza.name,
             price: selectedPizza.price,
-            totalPrice: totalPrice,
+            totalPrice: selectedPizza.price,
             ingredients: selectedPizza.ingredients,
             name: '',
             address: '',
@@ -87,7 +90,10 @@ export default function PizzaOrderScreen({ route, navigation }) {
             type: type.Thin,
             cheeseSides: false,
           }}
-          onSubmit={(values) => console.log(values)}
+          onSubmit={(values) => {
+            setModalVisible(true);
+            setOrderData(values);
+          }}
         >
           {({
             handleChange,
@@ -184,6 +190,9 @@ export default function PizzaOrderScreen({ route, navigation }) {
                     placeholder="Enter your name"
                     value={values.name}
                   />
+                  <Text style={styles.errorMessage}>
+                    <ErrorMessage name="name" />
+                  </Text>
                 </View>
                 <View style={styles.inputContainer}>
                   <Text style={styles.inputTitle}>Phone</Text>
@@ -199,6 +208,9 @@ export default function PizzaOrderScreen({ route, navigation }) {
                     placeholder="Enter your phone"
                     value={values.phone}
                   />
+                  <Text style={styles.errorMessage}>
+                    <ErrorMessage name="phone" />
+                  </Text>
                 </View>
                 <View style={styles.inputContainer}>
                   <Text style={styles.inputTitle}>Address</Text>
@@ -212,6 +224,9 @@ export default function PizzaOrderScreen({ route, navigation }) {
                     placeholder="Enter your address"
                     value={values.address}
                   />
+                  <Text style={styles.errorMessage}>
+                    <ErrorMessage name="address" />
+                  </Text>
                 </View>
               </View>
               <View style={[styles.sectionContainer, styles.bottom]}>
@@ -224,9 +239,12 @@ export default function PizzaOrderScreen({ route, navigation }) {
                     onPress={handleSubmit}
                     title="Order"
                     backgroundColor={Colors.accent}
-                    borderRadius={25}
+                    borderRadius={50}
                     textColor={'white'}
+                    flex={1}
+                    height={60}
                     fontSize={20}
+                    padding={0}
                     color={Colors.accent}
                   />
                 </View>
@@ -235,6 +253,13 @@ export default function PizzaOrderScreen({ route, navigation }) {
           )}
         </Formik>
       </ScrollView>
+      <ConfirmOrderModal
+        visible={modalVisible}
+        animationType="slide"
+        transparent={true}
+        statusBarTranslucent={true}
+        data={orderData}
+      />
     </>
   );
 }
@@ -317,6 +342,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     borderWidth: 2,
     backgroundColor: Colors.backgroundPrimary,
     borderColor: Colors.accent,
@@ -333,6 +359,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginStart: 10,
+  },
+  errorMessage: {
+    color: 'red',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });
