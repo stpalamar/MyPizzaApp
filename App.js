@@ -29,6 +29,14 @@ export default function App() {
           options={{
             title: 'Pizza Ordering',
             contentStyle: { backgroundColor: Colors.backgroundSecondary },
+            headerStyle: {
+              backgroundColor: Colors.accent,
+            },
+            headerTitleStyle: {
+              color: 'white',
+            },
+            headerTintColor: 'white',
+            animation: 'fade',
           }}
         />
       </Stack.Navigator>

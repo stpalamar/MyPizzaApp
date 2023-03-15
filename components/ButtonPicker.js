@@ -49,8 +49,6 @@ const styles = StyleSheet.create({
   circle: {
     height: 60,
     width: 60,
-    marginStart: 10,
-    marginEnd: 10,
     justifyContent: 'center',
     backgroundColor: 'lightgray',
     borderRadius: 50,

@@ -1,4 +1,5 @@
 import { View, Text } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { FlatList } from 'react-native';
 import PizzaListItem from '../components/PizzaListItem';
 
@@ -24,10 +25,13 @@ export default function PizzaListScreen({ navigation }) {
   }
 
   return (
-    <FlatList
-      data={PIZZAS}
-      keyExtractor={(item) => item.id}
-      renderItem={renderPizzaItem}
-    />
+    <>
+      <StatusBar style="dark" />
+      <FlatList
+        data={PIZZAS}
+        keyExtractor={(item) => item.id}
+        renderItem={renderPizzaItem}
+      />
+    </>
   );
 }
