@@ -24,6 +24,9 @@ export default function App() {
       tx.executeSql(
         'create table if not exists orders (id integer primary key not null, pizzaName text, totalPrice real, ingredients text, amount integer, size text, type text, cheeseSides integer, name text, address text, phone text);'
       );
+      tx.executeSql('select * from order', [], (_, { rows }) =>
+        console.log(JSON.stringify(rows), null, 2)
+      );
     });
   }, []);
   return (

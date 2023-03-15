@@ -12,6 +12,7 @@ const db = openDatabase();
 
 export default function ConfirmOrderModal({ data, onCancel, ...props }) {
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const {
     pizzaName,
@@ -28,9 +29,8 @@ export default function ConfirmOrderModal({ data, onCancel, ...props }) {
 
   const insertOrder = () => {
     db.transaction((tx) => {
-      console.log(ingredients);
       tx.executeSql(
-        'insert into order (pizzaName, totalPrice, ingredients, amount, size, type, cheeseSides, name, address, phone) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'insert into orders (pizzaName, totalPrice, ingredients, amount, size, type, cheeseSides, name, address, phone) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [
           pizzaName,
           totalPrice,
@@ -43,29 +43,34 @@ export default function ConfirmOrderModal({ data, onCancel, ...props }) {
           address,
           phone,
         ],
-        setIsSuccess(true),
-        (_, error) => console.log(error)
-      );
-      tx.executeSql('select * from orders', [], (_, { rows }) =>
-        console.log(JSON.stringify(rows), null, 2)
+        (_, resultSet) => {
+          setIsSuccess(true);
+        },
+        (_, error) => {
+          setIsError(true);
+        }
       );
     });
   };
 
-  if (isSuccess) {
+  if (isSuccess | isError) {
     return (
       <Modal {...props}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.header}>Order confirmed</Text>
+            <Text style={styles.header}>
+              {isSuccess ? 'Order confirmed' : 'Error happened'}
+            </Text>
             <View style={styles.buttonsView}>
               <CustomButton
                 onPress={() => {
-                  setIsSuccess(false);
+                  {
+                    isSuccess ? setIsSuccess(false) : setIsError(false);
+                  }
                   onCancel();
                 }}
-                title="OK"
-                backgroundColor={'forestgreen'}
+                title={isSuccess ? 'OK' : 'Try again'}
+                backgroundColor={isSuccess ? 'forestgreen' : 'red'}
                 textColor={'white'}
                 borderRadius={50}
                 flex={1}
