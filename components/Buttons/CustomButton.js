@@ -1,4 +1,4 @@
-import { View, Text, TouchableHighlight } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import React from 'react';
 
 export default function CustomButton({
@@ -12,32 +12,40 @@ export default function CustomButton({
   padding,
   fontSize,
   margin,
+  ...props
 }) {
   return (
-    <TouchableHighlight
+    <View
       style={{
-        flex: 1,
-        backgroundColor: backgroundColor,
         borderRadius: borderRadius,
-        width: width,
-        height: height,
-        padding: padding,
+        backgroundColor: backgroundColor,
         margin: margin,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
+        height: height,
+        width: width,
+        ...props,
       }}
-      underlayColor={'#ccc'}
-      onPress={onPress}
     >
-      <Text
-        style={{
-          color: textColor,
-          fontSize: fontSize,
-        }}
+      <Pressable
+        style={[
+          {
+            flex: 1,
+            padding: padding,
+            alignItems: 'center',
+            justifyContent: 'center',
+          },
+        ]}
+        android_ripple={{ color: '#ccc', borderless: true }}
+        onPress={onPress}
       >
-        {title}
-      </Text>
-    </TouchableHighlight>
+        <Text
+          style={{
+            color: textColor,
+            fontSize: fontSize,
+          }}
+        >
+          {title}
+        </Text>
+      </Pressable>
+    </View>
   );
 }
