@@ -1,17 +1,31 @@
-import { View, Text } from 'react-native';
+import React, { useLayoutEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { FlatList } from 'react-native';
 import PizzaListItem from '../components/PizzaList/PizzaListItem';
+import IconButton from '../components/Buttons/IconButton';
 
 import { PIZZAS } from '../data/dummy-data';
 
 export default function PizzaListScreen({ navigation }) {
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <IconButton
+          icon="cart-outline"
+          size={30}
+          onPress={() => navigation.navigate('OrdersList')}
+        />
+      ),
+    });
+  }, [navigation]);
+
   function renderPizzaItem(itemData) {
     function pressHandler() {
       navigation.navigate('PizzaOrder', {
         pizzaId: itemData.item.id,
       });
     }
+
     return (
       <PizzaListItem
         id={itemData.item.id}

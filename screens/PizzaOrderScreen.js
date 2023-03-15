@@ -82,13 +82,13 @@ export default function PizzaOrderScreen({ route, navigation }) {
             price: selectedPizza.price,
             totalPrice: selectedPizza.price,
             ingredients: selectedPizza.ingredients,
-            name: '',
-            address: '',
-            phone: '',
             amount: 1,
             size: size.Medium,
             type: type.Thin,
             cheeseSides: false,
+            name: 'Stanislav',
+            address: 'st. Lipkovska 1',
+            phone: '0660769298',
           }}
           onSubmit={(values) => {
             setModalVisible(true);
@@ -255,10 +255,16 @@ export default function PizzaOrderScreen({ route, navigation }) {
       </ScrollView>
       <ConfirmOrderModal
         visible={modalVisible}
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         statusBarTranslucent={true}
         data={orderData}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
+        onCancel={() => {
+          setModalVisible(false);
+        }}
       />
     </>
   );
