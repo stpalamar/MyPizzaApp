@@ -2,7 +2,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import { useField } from 'formik';
 
-import { Colors } from '../constants/Colors';
+import { Colors } from '../../constants/Colors';
 
 export default function ButtonPickerField({ name, data }) {
   const [field, meta, helpers] = useField(name);

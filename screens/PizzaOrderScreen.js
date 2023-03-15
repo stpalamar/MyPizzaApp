@@ -14,7 +14,7 @@ import Checkbox from 'expo-checkbox';
 
 import PizzaIngredientsText from '../components/PizzaOrder/PizzaIngredientsText';
 import AmountPickerField from '../components/CustomFields/AmountPickerField';
-import ButtonPickerField from '../components/ButtonPickerField';
+import ButtonPickerField from '../components/CustomFields/ButtonPickerField';
 import { Picker } from '@react-native-picker/picker';
 import CustomButton from '../components/Buttons/CustomButton';
 

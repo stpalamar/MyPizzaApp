@@ -2,7 +2,7 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import { useField } from 'formik';
 
-import IconButton from '../IconButton';
+import IconButton from '../Buttons/IconButton';
 
 import { Colors } from '../../constants/Colors';
 
