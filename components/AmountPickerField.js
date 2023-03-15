@@ -1,21 +1,27 @@
 import { View, Text, Button, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
+import { useField } from 'formik';
 
 import IconButton from './IconButton';
 
 import { Colors } from '../constants/Colors';
 
-export default function AmountPicker() {
-  const [amount, setAmount] = useState(1);
+export default function AmountPickerField({ name }) {
+  const [field, meta, helpers] = useField(name);
+  const { setValue } = helpers;
+  const { value } = meta;
+  const [amount, setAmount] = useState(value);
 
   const decreaseAmount = () => {
     if (amount <= 1) return;
     setAmount(amount - 1);
+    setValue(amount - 1);
   };
 
   const increaseAmount = () => {
     if (amount >= 10) return;
     setAmount(amount + 1);
+    setValue(amount + 1);
   };
 
   return (

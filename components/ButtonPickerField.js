@@ -1,13 +1,18 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
+import { useField } from 'formik';
 
 import { Colors } from '../constants/Colors';
 
-export default function ButtonPicker({ data, onSelect }) {
-  const [userOption, setUserOption] = React.useState(null);
+export default function ButtonPickerField({ name, data }) {
+  const [field, meta, helpers] = useField(name);
+  const { setValue } = helpers;
+  const { value } = meta;
+
+  const [userOption, setUserOption] = React.useState(value);
   const selectHandler = (value) => {
-    onSelect(value);
     setUserOption(value);
+    setValue(value);
   };
 
   return (

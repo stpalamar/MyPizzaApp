@@ -7,13 +7,14 @@ import {
   TextInput,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { Formik } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { Formik, Field, ErrorMessage, useFormikContext } from 'formik';
+import * as Yup from 'yup';
 import Checkbox from 'expo-checkbox';
 
 import PizzaIngredientsText from '../components/PizzaIngredientsText';
-import AmountPicker from '../components/AmountPicker';
-import ButtonPicker from '../components/ButtonPicker';
+import AmountPickerField from '../components/AmountPickerField';
+import ButtonPickerField from '../components/ButtonPickerField';
 import { Picker } from '@react-native-picker/picker';
 import CustomButton from '../components/CustomButton';
 
@@ -33,25 +34,51 @@ const type = {
   DoubleCheese: 'Double Cheese',
 };
 
+const CalcTotalPrice = () => {
+  const { values, setFieldValue } = useFormikContext();
+  useEffect(() => {
+    let onePizzaPrice = values.price;
+    if (values.size === size.Small) {
+      onePizzaPrice = onePizzaPrice * 0.8;
+    } else if (values.size === size.Large) {
+      onePizzaPrice = onePizzaPrice * 1.2;
+    }
+    if (values.type === type.Thick) {
+      onePizzaPrice = onePizzaPrice * 1.2;
+    } else if (values.type === type.DoubleCheese) {
+      onePizzaPrice = onePizzaPrice * 1.5;
+    }
+    if (values.cheeseSides) {
+      onePizzaPrice = onePizzaPrice + 2;
+    }
+    let finalPrice = onePizzaPrice;
+    finalPrice = finalPrice * values.amount;
+    setFieldValue('totalPrice', parseFloat(finalPrice).toFixed(2));
+  }, [values, setFieldValue]);
+  return null;
+};
+
 export default function PizzaOrderScreen({ route, navigation }) {
   const pizzaId = route.params.pizzaId;
   const selectedPizza = PIZZAS.find((pizza) => pizza.id === pizzaId);
-
-  const [amount, setAmount] = React.useState(1);
-  const [pizzaSize, setPizzaSize] = React.useState('Medium');
-  const [isCheeseSidesChecked, setCheeseSidesChecked] = useState(false);
-
-  const [selectedLanguage, setSelectedLanguage] = useState();
+  const [totalPrice, setTotalPrice] = useState(selectedPizza.price);
+  const schema = Yup.object().shape({
+    name: Yup.string().required("Name can't be empty"),
+    address: Yup.string().required("Address can't be empty"),
+    phone: Yup.string().required("Phone can't be empty"),
+  });
 
   return (
     <>
       <StatusBar style="light" />
       <ScrollView>
         <Formik
+          validationSchema={schema}
           initialValues={{
             pizzaName: selectedPizza.name,
-            pizzaPrice: selectedPizza.price,
-            pizzaIngredients: selectedPizza.ingredients,
+            price: selectedPizza.price,
+            totalPrice: totalPrice,
+            ingredients: selectedPizza.ingredients,
             name: '',
             address: '',
             phone: '',
@@ -62,7 +89,13 @@ export default function PizzaOrderScreen({ route, navigation }) {
           }}
           onSubmit={(values) => console.log(values)}
         >
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            setFieldValue,
+          }) => (
             <View style={styles.container}>
               <View style={styles.imageContainer}>
                 <Image style={styles.image} source={selectedPizza.imageUrl} />
@@ -81,17 +114,17 @@ export default function PizzaOrderScreen({ route, navigation }) {
               <View
                 style={[styles.sectionContainer, styles.amountPickerContainer]}
               >
-                <AmountPicker />
+                <AmountPickerField name="amount" />
               </View>
               <View style={[styles.sectionContainer]}>
                 <Text style={styles.title}>Select size</Text>
-                <ButtonPicker
+                <ButtonPickerField
+                  name="size"
                   data={[
                     { name: 'S', value: 'Small' },
                     { name: 'M', value: 'Medium' },
                     { name: 'L', value: 'Large' },
                   ]}
-                  onSelect={(value) => setPizzaSize(value)}
                 />
               </View>
               <View style={styles.sectionContainer}>
@@ -105,9 +138,9 @@ export default function PizzaOrderScreen({ route, navigation }) {
                         padding: 0,
                         color: Colors.textPrimary,
                       }}
-                      selectedValue={selectedLanguage}
+                      selectedValue={values.type}
                       onValueChange={(itemValue, itemIndex) =>
-                        setSelectedLanguage(itemValue)
+                        setFieldValue('type', itemValue)
                       }
                     >
                       <Picker.Item label={type.Thin} value={type.Thin} />
@@ -120,8 +153,10 @@ export default function PizzaOrderScreen({ route, navigation }) {
                   </View>
                   <View style={styles.checkboxContainer}>
                     <Checkbox
-                      value={isCheeseSidesChecked}
-                      onValueChange={setCheeseSidesChecked}
+                      value={values.cheeseSides}
+                      onValueChange={(newValue) =>
+                        setFieldValue('cheeseSides', newValue)
+                      }
                       color={Colors.accent}
                       style={{
                         height: 25,
@@ -181,7 +216,8 @@ export default function PizzaOrderScreen({ route, navigation }) {
               </View>
               <View style={[styles.sectionContainer, styles.bottom]}>
                 <View style={styles.priceContainer}>
-                  <Text style={styles.price}>$25.56{values.price}</Text>
+                  <Text style={styles.price}>${values.totalPrice}</Text>
+                  <CalcTotalPrice />
                 </View>
                 <View style={styles.submitButton}>
                   <CustomButton
